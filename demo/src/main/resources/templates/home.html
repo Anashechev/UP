@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Главная</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        a.button { display: inline-block; padding: 10px 16px; margin-right: 10px; background: #1976d2; color: #fff; text-decoration: none; border-radius: 6px; }
+        a.button:hover { background: #125a9e; }
+    </style>
+    </head>
+<body>
+<h1>Главная</h1>
+<a class="button" th:href="@{/calculator}">Калькулятор</a>
+<a class="button" th:href="@{/converter}">Конвертер валют</a>
+</body>
+</html>
+
+

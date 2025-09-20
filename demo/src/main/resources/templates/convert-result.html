@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Результат конвертации</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        a { margin-right: 10px; }
+    </style>
+</head>
+<body>
+<h1>Результат конвертации</h1>
+<p>
+    <span th:text="${amount}">0</span>
+    <span th:text="${from}">USD</span>
+    =
+    <strong th:text="${converted}">0</strong>
+    <span th:text="${to}">RUB</span>
+    </p>
+
+<a th:href="@{/converter}">Назад</a>
+<a th:href="@{/}">На главную</a>
+</body>
+</html>
+
+

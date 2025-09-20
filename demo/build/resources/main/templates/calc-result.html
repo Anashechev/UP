@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Результат вычисления</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        a { margin-right: 10px; }
+    </style>
+</head>
+<body>
+<h1>Результат</h1>
+<p>Ответ: <strong th:text="${calcResult}">0</strong></p>
+
+<a th:href="@{/calculator}">Новая операция</a>
+<a th:href="@{/}">На главную</a>
+</body>
+</html>
+
+

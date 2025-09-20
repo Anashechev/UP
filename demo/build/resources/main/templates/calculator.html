@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Калькулятор</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        form { display: flex; gap: 8px; align-items: center; }
+        input, select { padding: 6px; }
+        button { padding: 8px 12px; }
+        .error { color: #c62828; margin-top: 10px; }
+        a { margin-left: 10px; }
+    </style>
+</head>
+<body>
+<h1>Калькулятор</h1>
+<form th:action="@{/calculate}" method="post">
+    <input type="number" step="any" name="a" placeholder="Первое число" required>
+    <select name="op">
+        <option value="+">+</option>
+        <option value="-">-</option>
+        <option value="*">*</option>
+        <option value="/">/</option>
+    </select>
+    <input type="number" step="any" name="b" placeholder="Второе число" required>
+    <button type="submit">Посчитать</button>
+    <a th:href="@{/}">На главную</a>
+    <a th:href="@{/converter}">Конвертер валют</a>
+    </form>
+
+<div class="error" th:if="${error}" th:text="${error}"></div>
+
+</body>
+</html>
+
+
