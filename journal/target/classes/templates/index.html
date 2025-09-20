@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Журнал студентов</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .nav-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            text-decoration: none;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .nav-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            text-decoration: none;
+            color: white;
+        }
+        .nav-card h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.5em;
+        }
+        .nav-card p {
+            margin: 0;
+            opacity: 0.9;
+        }
+        .features {
+            margin-top: 40px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        .features h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .features ul {
+            list-style: none;
+            padding: 0;
+        }
+        .features li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .features li:before {
+            content: "✓ ";
+            color: #28a745;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎓 Журнал студентов</h1>
+        <p style="text-align: center; color: #666; font-size: 1.1em;">
+            Система управления студентами, группами и предметами
+        </p>
+        
+        <div class="nav-grid">
+            <a href="/students" class="nav-card">
+                <h3>👥 Студенты</h3>
+                <p>Управление студентами</p>
+            </a>
+            
+            <a href="/groups" class="nav-card">
+                <h3>🏫 Группы</h3>
+                <p>Управление группами</p>
+            </a>
+            
+            <a href="/subjects" class="nav-card">
+                <h3>📚 Предметы</h3>
+                <p>Управление предметами</p>
+            </a>
+        </div>
+        
+        <div class="features">
+            <h2>🚀 Возможности системы</h2>
+            <ul>
+                <li>Добавление, редактирование и удаление записей</li>
+                <li>Поиск по различным параметрам</li>
+                <li>Фильтрация по нескольким критериям</li>
+                <li>Множественное удаление записей</li>
+                <li>Логическое и физическое удаление</li>
+                <li>Пагинация с настраиваемым размером страницы</li>
+                <li>Современный и удобный интерфейс</li>
+                <li>Валидация данных</li>
+                <li>Отслеживание времени создания и обновления</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
