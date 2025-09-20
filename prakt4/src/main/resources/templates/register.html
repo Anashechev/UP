@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="fragments/layout :: layout(~{::section})">
+<head>
+	<title>Регистрация - Библиотека знаний</title>
+</head>
+<section>
+	<div class="card" style="max-width:550px;margin:60px auto; text-align: center;">
+		<div style="margin-bottom: 30px;">
+			<h1>📝 Регистрация</h1>
+			<p class="note">Создайте новый аккаунт для доступа к библиотеке знаний</p>
+		</div>
+		
+		<div class="alert error" th:if="${error}" th:text="${error}"></div>
+		
+		<form th:action="@{/register}" method="post" style="text-align: left;">
+			<div class="field">
+				<label>👤 Имя пользователя</label>
+				<input type="text" name="username" placeholder="Придумайте уникальный логин" required />
+			</div>
+			<div class="field">
+				<label>🔒 Пароль</label>
+				<input type="password" name="password" placeholder="Минимум 8 символов, цифра и спецсимвол" required />
+				<small style="color: var(--text-muted); font-size: 12px; margin-top: 5px; display: block;">
+					💡 Пароль должен содержать минимум 8 символов, включая цифры и специальные символы
+				</small>
+			</div>
+			<div style="text-align: center; margin-top: 30px;">
+				<button class="button success" type="submit" style="width: 100%; padding: 16px;">
+					🎉 Создать аккаунт
+				</button>
+			</div>
+		</form>
+		
+		<div class="links" style="margin-top: 30px; text-align: center;">
+			<p>Уже есть аккаунт?</p>
+			<a th:href="@{/login}" class="button">🔐 Войти в систему</a>
+		</div>
+	</div>
+</section>
+</html>

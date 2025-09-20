@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" th:replace="fragments/layout :: layout(~{::section})">
+<head>
+	<title>Менеджер-панель - Библиотека знаний</title>
+</head>
+<section>
+	<div class="card" style="margin:40px auto; text-align: center;">
+		<div style="margin-bottom: 30px;">
+			<h1>⚡ Менеджер-панель</h1>
+			<p class="note">Управление контентом библиотеки</p>
+		</div>
+		
+		<div sec:authorize="!hasRole('MANAGER')" class="alert error">
+			🚫 Недостаточно прав доступа для страницы "Менеджер"
+		</div>
+		
+		<div sec:authorize="hasRole('MANAGER')">
+			<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin: 30px 0;">
+				<div class="glass-effect" style="padding: 25px; border-radius: 15px; text-align: left;">
+					<h3>📚 Каталог книг</h3>
+					<p>Просмотр и управление книгами</p>
+					<a class="button" th:href="@{/books}">Перейти к книгам</a>
+				</div>
+				
+				<div class="glass-effect" style="padding: 25px; border-radius: 15px; text-align: left;">
+					<h3>➕ Добавить книгу</h3>
+					<p>Добавление новых книг в каталог</p>
+					<a class="button success" th:href="@{/books/new}">Добавить книгу</a>
+				</div>
+				
+				<div class="glass-effect" style="padding: 25px; border-radius: 15px; text-align: left;">
+					<h3>📋 Справочники</h3>
+					<p>Просмотр авторов и категорий</p>
+					<a class="button warning" th:href="@{/meta}">Просмотр справочников</a>
+				</div>
+				
+				<div class="glass-effect" style="padding: 25px; border-radius: 15px; text-align: left;">
+					<h3>📊 Отчеты</h3>
+					<p>Статистика по библиотеке</p>
+					<a class="button secondary" href="#" onclick="alert('Функция в разработке')">Просмотр отчетов</a>
+				</div>
+			</div>
+			
+			<div style="background: rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 12px; margin-top: 30px;">
+				<h3>📈 Быстрая статистика</h3>
+				<p class="note">Доступно менеджерам для управления контентом</p>
+			</div>
+		</div>
+		
+		<div style="margin-top: 30px;">
+			<a th:href="@{/home}" class="button">🏠 Вернуться на главную</a>
+		</div>
+	</div>
+</section>
+</html>

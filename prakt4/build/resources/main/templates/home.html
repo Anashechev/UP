@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" th:replace="fragments/layout :: layout(~{::section})">
+<head>
+	<title>Главная - Библиотека знаний</title>
+</head>
+<section>
+	<div class="card" style="margin:40px auto; text-align: center;">
+		<h1>🌟 Добро пожаловать, <span class="gradient-text" th:text="${username}">пользователь</span>!</h1>
+		<p class="note">Выберите интересующий вас раздел:</p>
+		
+		<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin: 30px 0;">
+			<div class="glass-effect" style="padding: 20px; border-radius: 15px; text-align: left;" sec:authorize="hasAnyRole('USER','MANAGER','ADMIN')">
+				<h3>📚 Книги</h3>
+				<p>Просмотр доступен всем авторизованным пользователям</p>
+				<a class="button" th:href="@{/books}">Перейти к книгам</a>
+			</div>
+			
+			<div class="glass-effect" style="padding: 20px; border-radius: 15px; text-align: left;" sec:authorize="hasAnyRole('MANAGER','ADMIN')">
+				<h3>➕ Добавить книгу</h3>
+				<p>Доступно менеджерам и администраторам</p>
+				<a class="button success" th:href="@{/books/new}">Добавить новую книгу</a>
+			</div>
+			
+			<div class="glass-effect" style="padding: 20px; border-radius: 15px; text-align: left;" sec:authorize="hasAnyRole('MANAGER','ADMIN')">
+				<h3>👥 Авторы и категории</h3>
+				<p>Управление метаданными библиотеки</p>
+				<a class="button warning" th:href="@{/meta}">Управление</a>
+			</div>
+			
+			<div class="glass-effect" style="padding: 20px; border-radius: 15px; text-align: left;" sec:authorize="hasRole('ADMIN')">
+				<h3>👑 Админ-панель</h3>
+				<p>Полный контроль над системой</p>
+				<a class="button secondary" th:href="@{/admin}">Админ-панель</a>
+			</div>
+			
+			<div class="glass-effect" style="padding: 20px; border-radius: 15px; text-align: left;" sec:authorize="hasRole('MANAGER')">
+				<h3>⚡ Менеджер-панель</h3>
+				<p>Управление контентом библиотеки</p>
+				<a class="button warning" th:href="@{/manager}">Менеджер-панель</a>
+			</div>
+			
+			<div class="glass-effect" style="padding: 20px; border-radius: 15px; text-align: left;" sec:authorize="hasAnyRole('USER','ADMIN','MANAGER')">
+				<h3>👤 Личный кабинет</h3>
+				<p>Ваши настройки и профиль</p>
+				<a class="button" th:href="@{/user}">Личный кабинет</a>
+			</div>
+		</div>
+		
+		<div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
+			<form th:action="@{/logout}" method="post">
+				<button class="button secondary" type="submit">🚪 Выйти из системы</button>
+			</form>
+		</div>
+	</div>
+</section>
+</html>

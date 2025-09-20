@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" th:replace="fragments/layout :: layout(~{::section})">
+<head>
+	<title>Админ-панель - Библиотека знаний</title>
+</head>
+<section>
+	<div class="card" style="margin:40px auto; text-align: center;">
+		<div style="margin-bottom: 30px;">
+			<h1>👑 Админ-панель</h1>
+			<p class="note">Центр управления библиотекой знаний</p>
+		</div>
+		
+		<div sec:authorize="!hasRole('ADMIN')" class="alert error">
+			🚫 Недостаточно прав доступа для страницы "Администратор"
+		</div>
+		
+		<div sec:authorize="hasRole('ADMIN')">
+			<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin: 30px 0;">
+				<div class="glass-effect" style="padding: 25px; border-radius: 15px; text-align: left;">
+					<h3>📚 Управление книгами</h3>
+					<p>Полный контроль над каталогом книг</p>
+					<a class="button" th:href="@{/books}">Перейти к книгам</a>
+				</div>
+				
+				<div class="glass-effect" style="padding: 25px; border-radius: 15px; text-align: left;">
+					<h3>📋 Справочники</h3>
+					<p>Управление авторами и категориями</p>
+					<a class="button warning" th:href="@{/meta}">Управление справочниками</a>
+				</div>
+				
+				<div class="glass-effect" style="padding: 25px; border-radius: 15px; text-align: left;">
+					<h3>👥 Пользователи</h3>
+					<p>Управление пользователями системы</p>
+					<a class="button secondary" href="#" onclick="alert('Функция в разработке')">Управление пользователями</a>
+				</div>
+				
+				<div class="glass-effect" style="padding: 25px; border-radius: 15px; text-align: left;">
+					<h3>📊 Статистика</h3>
+					<p>Аналитика и отчеты</p>
+					<a class="button success" href="#" onclick="alert('Функция в разработке')">Просмотр статистики</a>
+				</div>
+			</div>
+			
+			<div style="background: rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 12px; margin-top: 30px;">
+				<h3>🔧 Системная информация</h3>
+				<p class="note">Доступен только администраторам системы</p>
+			</div>
+		</div>
+		
+		<div style="margin-top: 30px;">
+			<a th:href="@{/home}" class="button">🏠 Вернуться на главную</a>
+		</div>
+	</div>
+</section>
+</html>

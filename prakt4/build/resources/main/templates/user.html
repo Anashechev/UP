@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="fragments/layout :: layout(~{::section})">
+<head>
+	<title>Личный кабинет - Библиотека знаний</title>
+</head>
+<section>
+	<div class="card" style="margin:40px auto; text-align: center;">
+		<div style="margin-bottom: 30px;">
+			<h1>👤 Личный кабинет</h1>
+			<p class="note">Ваш персональный раздел в библиотеке знаний</p>
+		</div>
+		
+		<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin: 30px 0;">
+			<div class="glass-effect" style="padding: 25px; border-radius: 15px; text-align: left;">
+				<h3>📚 Мои книги</h3>
+				<p>Просмотр доступных книг</p>
+				<a class="button" th:href="@{/books}">Перейти к каталогу</a>
+			</div>
+			
+			<div class="glass-effect" style="padding: 25px; border-radius: 15px; text-align: left;">
+				<h3>🔍 Поиск</h3>
+				<p>Поиск по каталогу библиотеки</p>
+				<a class="button success" href="#" onclick="alert('Функция поиска в разработке')">Найти книги</a>
+			</div>
+			
+			<div class="glass-effect" style="padding: 25px; border-radius: 15px; text-align: left;">
+				<h3>⭐ Избранное</h3>
+				<p>Ваши избранные книги</p>
+				<a class="button warning" href="#" onclick="alert('Функция избранного в разработке')">Мои избранные</a>
+			</div>
+			
+			<div class="glass-effect" style="padding: 25px; border-radius: 15px; text-align: left;">
+				<h3>📝 Настройки</h3>
+				<p>Персональные настройки</p>
+				<a class="button secondary" href="#" onclick="alert('Настройки в разработке')">Настройки профиля</a>
+			</div>
+		</div>
+		
+		<div style="background: rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 12px; margin-top: 30px;">
+			<h3>📊 Ваша активность</h3>
+			<p class="note">Доступно всем авторизованным пользователям</p>
+		</div>
+		
+		<div style="margin-top: 30px;">
+			<a th:href="@{/home}" class="button">🏠 Вернуться на главную</a>
+		</div>
+	</div>
+</section>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="fragments/layout :: layout(~{::section})">
+<head>
+	<title th:text="${book.id} != null ? 'Редактировать книгу - Библиотека знаний' : 'Новая книга - Библиотека знаний'">Книга</title>
+</head>
+<section>
+	<div class="card" style="max-width:700px; margin: 40px auto;">
+		<div style="text-align: center; margin-bottom: 30px;">
+			<h1 th:text="${book.id} != null ? '✏️ Редактировать книгу' : '📚 Добавить новую книгу'">Книга</h1>
+			<p class="note" th:text="${book.id} != null ? 'Внесите изменения в информацию о книге' : 'Заполните информацию о новой книге'"></p>
+		</div>
+		
+		<div class="alert error" th:if="${error}" th:text="${error}"></div>
+		
+		<form th:action="${book.id} != null ? @{'/books/' + ${book.id}} : @{/books}" method="post" style="text-align: left;">
+			<div class="field">
+				<label>📖 Название книги</label>
+				<input type="text" name="title" th:value="${book.title}" placeholder="Введите название книги" required />
+			</div>
+			
+			<div class="field">
+				<label>✍️ Автор</label>
+				<select name="authorId" required>
+					<option value="" disabled th:selected="${book.author == null}">Выберите автора</option>
+					<option th:each="a : ${authors}" 
+					        th:value="${a.id}" 
+					        th:selected="${book.author != null} ? ${a.id} == ${book.author.id} : false" 
+					        th:text="${a.name}">
+					</option>
+				</select>
+			</div>
+			
+			<div class="field">
+				<label>🏷️ Категория</label>
+				<select name="categoryId" required>
+					<option value="" disabled th:selected="${book.category == null}">Выберите категорию</option>
+					<option th:each="c : ${categories}" 
+					        th:value="${c.id}" 
+					        th:selected="${book.category != null} ? ${c.id} == ${book.category.id} : false" 
+					        th:text="${c.title}">
+					</option>
+				</select>
+			</div>
+			
+			<div style="text-align: center; margin-top: 40px;">
+				<button class="button success" type="submit" style="width: 100%; padding: 16px; font-size: 16px;">
+					💾 Сохранить книгу
+				</button>
+			</div>
+		</form>
+		
+		<div style="margin-top: 30px; text-align: center;">
+			<a th:href="@{/books}" class="button">📚 Назад к каталогу</a>
+		</div>
+	</div>
+</section>
+</html>

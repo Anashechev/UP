@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" th:fragment="layout(content)">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>📚 Библиотека знаний</title>
+	<link rel="stylesheet" th:href="@{/css/styles.css}" />
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+	<header class="site-header">
+		<div class="container header-inner">
+			<a class="brand" th:href="@{/home}">📚 Библиотека знаний</a>
+			<div style="display:flex;align-items:center;gap:20px;">
+				<span class="role-badge">
+					<span sec:authorize="isAnonymous()">👤 Гость</span>
+					<span sec:authorize="hasRole('ADMIN')">👑 Администратор</span>
+					<span sec:authorize="hasRole('MANAGER')">⚡ Менеджер</span>
+					<span sec:authorize="hasRole('USER') and !hasRole('ADMIN') and !hasRole('MANAGER')">👤 Пользователь</span>
+				</span>
+				<nav>
+					<a th:href="@{/home}">🏠 Главная</a>
+					<a th:href="@{/login}" sec:authorize="isAnonymous()">🔐 Войти</a>
+					<a th:href="@{/register}" sec:authorize="isAnonymous()">📝 Регистрация</a>
+					<form th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()" style="display:inline;">
+						<button class="button secondary" type="submit">🚪 Выйти</button>
+					</form>
+				</nav>
+			</div>
+		</div>
+	</header>
+	<main class="container" th:insert="${content}"></main>
+</body>
+</html>
