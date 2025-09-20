@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Список студентов</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    .form-group { margin: 10px 0; }
+    .form-group input { margin: 5px; padding: 8px; }
+    .student-item { border: 1px solid #ccc; margin: 10px 0; padding: 10px; }
+    .search-form { background: #f5f5f5; padding: 15px; margin: 10px 0; }
+    .add-form { background: #e8f5e8; padding: 15px; margin: 10px 0; }
+    button { padding: 8px 15px; margin: 5px; cursor: pointer; }
+    .delete-btn { background: #ff6b6b; color: white; border: none; }
+    .logical-delete-btn { background: #ffa500; color: white; border: none; }
+    .update-btn { background: #4ecdc4; color: white; border: none; }
+    .add-btn { background: #45b7d1; color: white; border: none; }
+    .nav-link { margin: 10px; text-decoration: none; color: #333; }
+  </style>
+</head>
+<body>
+<h1>Список студентов</h1>
+
+<div style="margin: 20px 0;">
+  <a href="/students" class="nav-link">Студенты</a>
+  <a href="/groups" class="nav-link">Группы</a>
+  <a href="/subjects" class="nav-link">Предметы</a>
+</div>
+
+<div class="search-form">
+  <h3>Поиск студентов</h3>
+  <form action="/students/search" method="get">
+    <input type="text" name="name" placeholder="Введите имя, фамилию, отчество или дополнительное имя" 
+           th:value="${searchQuery}" style="width: 300px;">
+    <button type="submit">Поиск</button>
+    <a href="/students" style="margin-left: 10px;">Показать всех</a>
+  </form>
+</div>
+
+<div class="add-form">
+  <h3>Добавить нового студента</h3>
+  <form action="/students/add" method="post">
+    <div class="form-group">
+      <input type="text" name="name" placeholder="Имя" required>
+      <input type="text" name="lastName" placeholder="Фамилия" required>
+      <input type="text" name="firstName" placeholder="Отчество" required>
+      <input type="text" name="middleName" placeholder="Дополнительное имя" required>
+      <input type="email" name="email" placeholder="Email">
+      <input type="tel" name="phone" placeholder="Телефон">
+      <input type="number" name="age" placeholder="Возраст" min="16" max="100">
+    </div>
+    <button type="submit" class="add-btn">Добавить студента</button>
+  </form>
+</div>
+
+<div class="search-form">
+  <h3>Фильтрация студентов</h3>
+  <form action="/students/filter" method="get">
+    <div class="form-group">
+      <input type="text" name="name" placeholder="Имя, фамилия, отчество" 
+             th:value="${filterName}">
+      <input type="number" name="minAge" placeholder="Минимальный возраст" min="16" max="100"
+             th:value="${filterMinAge}">
+      <input type="text" name="emailDomain" placeholder="Домен email (например: gmail.com)"
+             th:value="${filterEmailDomain}">
+    </div>
+    <button type="submit">Фильтровать</button>
+    <a href="/students" style="margin-left: 10px;">Сбросить фильтры</a>
+  </form>
+</div>
+
+<h2>Список студентов:</h2>
+
+<!-- Пагинация сверху -->
+<div th:if="${totalPages > 1}" style="margin: 20px 0; text-align: center;">
+  <span>Страница <span th:text="${currentPage + 1}"></span> из <span th:text="${totalPages}"></span></span>
+  <span style="margin: 0 10px;">Всего записей: <span th:text="${totalCount}"></span></span>
+  
+  <div style="margin: 10px 0;">
+    <a th:if="${currentPage > 0}" th:href="@{/students(page=${currentPage - 1}, size=${pageSize})}" 
+       style="margin: 0 5px; padding: 5px 10px; background: #4ecdc4; color: white; text-decoration: none;">Предыдущая</a>
+    
+    <span th:each="page : ${#numbers.sequence(0, totalPages - 1)}" style="margin: 0 2px;">
+      <a th:if="${page != currentPage}" th:href="@{/students(page=${page}, size=${pageSize})}" 
+         th:text="${page + 1}" style="padding: 5px 8px; background: #f0f0f0; text-decoration: none; margin: 0 2px;"></a>
+      <span th:if="${page == currentPage}" th:text="${page + 1}" 
+            style="padding: 5px 8px; background: #4ecdc4; color: white; margin: 0 2px;"></span>
+    </span>
+    
+    <a th:if="${currentPage < totalPages - 1}" th:href="@{/students(page=${currentPage + 1}, size=${pageSize})}" 
+       style="margin: 0 5px; padding: 5px 10px; background: #4ecdc4; color: white; text-decoration: none;">Следующая</a>
+  </div>
+</div>
+
+<!-- Множественное удаление -->
+<div th:if="${students != null and !students.empty}" style="margin: 10px 0;">
+  <button onclick="selectAllStudents()" style="background: #45b7d1; color: white; border: none; padding: 8px 15px; margin: 5px;">Выбрать всех</button>
+  <button onclick="deselectAllStudents()" style="background: #ffa500; color: white; border: none; padding: 8px 15px; margin: 5px;">Снять выбор</button>
+  <button onclick="deleteSelectedStudents()" style="background: #ff6b6b; color: white; border: none; padding: 8px 15px; margin: 5px;">Удалить выбранных</button>
+  <button onclick="logicalDeleteSelectedStudents()" style="background: #ffa500; color: white; border: none; padding: 8px 15px; margin: 5px;">Скрыть выбранных</button>
+</div>
+
+<div th:if="${students != null and !students.empty}">
+  <div th:each="student : ${students}" class="student-item">
+    <input type="checkbox" th:id="'student_' + ${student.id}" th:value="${student.id}" class="student-checkbox" style="margin-right: 10px;">
+    <h4 th:text="${student.fullName}" style="display: inline;"></h4>
+    <p><strong>ID:</strong> <span th:text="${student.id}"></span></p>
+    <p th:if="${student.email != null}"><strong>Email:</strong> <span th:text="${student.email}"></span></p>
+    <p th:if="${student.phone != null}"><strong>Телефон:</strong> <span th:text="${student.phone}"></span></p>
+    <p th:if="${student.age > 0}"><strong>Возраст:</strong> <span th:text="${student.age}"></span></p>
+    <p><strong>Создан:</strong> <span th:text="${#temporals.format(student.createdAt, 'dd.MM.yyyy HH:mm')}"></span></p>
+    <p><strong>Обновлен:</strong> <span th:text="${#temporals.format(student.updatedAt, 'dd.MM.yyyy HH:mm')}"></span></p>
+    
+    <form action="/students/update" method="post" style="display:inline;">
+      <input type="hidden" name="id" th:value="${student.id}"/>
+      <input type="text" name="name" th:value="${student.name}" placeholder="Имя" required/>
+      <input type="text" name="lastName" th:value="${student.lastName}" placeholder="Фамилия" required/>
+      <input type="text" name="firstName" th:value="${student.firstName}" placeholder="Отчество" required/>
+      <input type="text" name="middleName" th:value="${student.middleName}" placeholder="Дополнительное имя" required/>
+      <input type="email" name="email" th:value="${student.email}" placeholder="Email"/>
+      <input type="tel" name="phone" th:value="${student.phone}" placeholder="Телефон"/>
+      <input type="number" name="age" th:value="${student.age}" placeholder="Возраст" min="16" max="100"/>
+      <button type="submit" class="update-btn">Обновить</button>
+    </form>
+    
+    <form action="/students/logical-delete" method="post" style="display:inline;">
+      <input type="hidden" name="id" th:value="${student.id}"/>
+      <button type="submit" class="logical-delete-btn" onclick="return confirm('Вы уверены, что хотите скрыть этого студента?')">Скрыть</button>
+    </form>
+    
+    <form action="/students/delete" method="post" style="display:inline;">
+      <input type="hidden" name="id" th:value="${student.id}"/>
+      <button type="submit" class="delete-btn" onclick="return confirm('Вы уверены, что хотите полностью удалить этого студента?')">Удалить навсегда</button>
+    </form>
+  </div>
+</div>
+
+<div th:if="${students == null or students.empty}">
+  <p>Студенты не найдены.</p>
+</div>
+
+<!-- Пагинация снизу -->
+<div th:if="${totalPages > 1}" style="margin: 20px 0; text-align: center;">
+  <span>Страница <span th:text="${currentPage + 1}"></span> из <span th:text="${totalPages}"></span></span>
+  <span style="margin: 0 10px;">Всего записей: <span th:text="${totalCount}"></span></span>
+  
+  <div style="margin: 10px 0;">
+    <a th:if="${currentPage > 0}" th:href="@{/students(page=${currentPage - 1}, size=${pageSize})}" 
+       style="margin: 0 5px; padding: 5px 10px; background: #4ecdc4; color: white; text-decoration: none;">Предыдущая</a>
+    
+    <span th:each="page : ${#numbers.sequence(0, totalPages - 1)}" style="margin: 0 2px;">
+      <a th:if="${page != currentPage}" th:href="@{/students(page=${page}, size=${pageSize})}" 
+         th:text="${page + 1}" style="padding: 5px 8px; background: #f0f0f0; text-decoration: none; margin: 0 2px;"></a>
+      <span th:if="${page == currentPage}" th:text="${page + 1}" 
+            style="padding: 5px 8px; background: #4ecdc4; color: white; margin: 0 2px;"></span>
+    </span>
+    
+    <a th:if="${currentPage < totalPages - 1}" th:href="@{/students(page=${currentPage + 1}, size=${pageSize})}" 
+       style="margin: 0 5px; padding: 5px 10px; background: #4ecdc4; color: white; text-decoration: none;">Следующая</a>
+  </div>
+</div>
+
+<script>
+function selectAllStudents() {
+    const checkboxes = document.querySelectorAll('.student-checkbox');
+    checkboxes.forEach(checkbox => checkbox.checked = true);
+}
+
+function deselectAllStudents() {
+    const checkboxes = document.querySelectorAll('.student-checkbox');
+    checkboxes.forEach(checkbox => checkbox.checked = false);
+}
+
+function getSelectedStudentIds() {
+    const checkboxes = document.querySelectorAll('.student-checkbox:checked');
+    return Array.from(checkboxes).map(checkbox => checkbox.value);
+}
+
+function deleteSelectedStudents() {
+    const selectedIds = getSelectedStudentIds();
+    if (selectedIds.length === 0) {
+        alert('Выберите студентов для удаления');
+        return;
+    }
+    
+    if (confirm('Вы уверены, что хотите полностью удалить выбранных студентов?')) {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '/students/delete-multiple';
+        
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'studentIds';
+        input.value = selectedIds.join(',');
+        
+        form.appendChild(input);
+        document.body.appendChild(form);
+        form.submit();
+    }
+}
+
+function logicalDeleteSelectedStudents() {
+    const selectedIds = getSelectedStudentIds();
+    if (selectedIds.length === 0) {
+        alert('Выберите студентов для скрытия');
+        return;
+    }
+    
+    if (confirm('Вы уверены, что хотите скрыть выбранных студентов?')) {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '/students/logical-delete-multiple';
+        
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'studentIds';
+        input.value = selectedIds.join(',');
+        
+        form.appendChild(input);
+        document.body.appendChild(form);
+        form.submit();
+    }
+}
+</script>
+
+</body>
+</html>
